@@ -13,9 +13,11 @@ import type { Candle, Signal } from "./api";
 export default function Chart({
   bars,
   signal,
+  fontSize,
 }: {
   bars: Candle[];
   signal: Signal | null;
+  fontSize: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -26,6 +28,7 @@ export default function Chart({
         background: { type: ColorType.Solid, color: "#ffffff" },
         textColor: "#66788b",
         fontFamily: "Segoe UI, sans-serif",
+        fontSize,
         attributionLogo: true,
       },
       grid: {
@@ -99,7 +102,7 @@ export default function Chart({
     }
     chart.timeScale().fitContent();
     return () => chart.remove();
-  }, [bars, signal]);
+  }, [bars, signal, fontSize]);
   return (
     <div className="chart-container">
       <div ref={ref} className="chart" />

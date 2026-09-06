@@ -2,6 +2,8 @@
 
 A private local futures research desk built with React, TypeScript, Vite and Lightweight Charts. Markets, Signals, Paper account and Evaluation show real observations and explicitly missing data. No synthetic market feed is used by the application.
 
+The Markets setup checklist reads backend readiness: worker availability, local access configuration, each contract's warm-up, and eligibility to watch for signals. Connection setup provides the local configuration commands. Larger typography is the default; choose Extra large in Preferences or Connection setup. Chart labels follow the selected size.
+
 ## Build
 
 ```powershell

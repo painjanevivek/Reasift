@@ -21,6 +21,7 @@ import {
   X,
 } from "lucide-react";
 import Chart from "./Chart";
+import Readiness from "./Readiness";
 import {
   api,
   initializeSession,
@@ -61,6 +62,23 @@ export default function App() {
   const [notice, setNotice] = useState("");
   const [drawer, setDrawer] = useState<"alerts" | "settings" | null>(null);
   const [clock, setClock] = useState(new Date());
+  const [textSize, setTextSize] = useState(() => {
+    try {
+      return localStorage.getItem("reasift-text-size") === "extra"
+        ? "extra"
+        : "large";
+    } catch {
+      return "large";
+    }
+  });
+  useEffect(() => {
+    document.documentElement.dataset.textSize = textSize;
+    try {
+      localStorage.setItem("reasift-text-size", textSize);
+    } catch {
+      /* Browser storage may be disabled. */
+    }
+  }, [textSize]);
   const refresh = useCallback(async () => {
     const [s, ts, p, e, ss] = await Promise.all([
       api<Snapshot>("snapshot"),
@@ -354,7 +372,11 @@ export default function App() {
             </span>
             <button
               className="button primary"
-              disabled={busy || !snapshot?.worker_online}
+              disabled={
+                busy ||
+                !snapshot?.worker_online ||
+                (!snapshot?.monitoring && !snapshot?.data_configured)
+              }
               onClick={() =>
                 void action("monitoring", {
                   action: snapshot?.monitoring ? "pause" : "start",
@@ -367,6 +389,12 @@ export default function App() {
           </div>
           {view === "Markets" && (
             <>
+              {snapshot && (
+                <Readiness
+                  snapshot={snapshot}
+                  openSetup={() => setDrawer("settings")}
+                />
+              )}
               <div className="market-stats">
                 <Stat
                   label="PAPER EQUITY"
@@ -439,7 +467,11 @@ export default function App() {
                       </span>
                     </div>
                   </div>
-                  <Chart bars={bars} signal={focusSignal} />
+                  <Chart
+                    bars={bars}
+                    signal={focusSignal}
+                    fontSize={textSize === "extra" ? 18 : 16}
+                  />
                   <div className="chart-footer">
                     <span>
                       <span className="small-dot" /> Databento · Actual contract
@@ -923,12 +955,29 @@ export default function App() {
               </div>
             ) : (
               <div className="settings-body">
+                <label className="display-setting">
+                  <span>Text and interface size</span>
+                  <select
+                    value={textSize}
+                    onChange={(e) => setTextSize(e.target.value)}
+                  >
+                    <option value="large">Large (default)</option>
+                    <option value="extra">Extra large</option>
+                  </select>
+                </label>
                 <h3>Market-data connection</h3>
                 <p>
-                  In Backend, copy <code>.env.example</code> to{" "}
-                  <code>.env</code>. Enter your Databento key there, verify your
-                  entitlement, and set <code>REASIFT_LIVE_ENABLED=true</code>.
-                  Restart Reasift afterward.
+                  Run these commands in PowerShell. The setup asks for your
+                  Databento credential privately on this computer and preserves
+                  your other settings.
+                </p>
+                <pre className="setup-command">{`cd D:\\Work\\Project\\Dev\\Reasift\\Backend\n.\\Configure-Reasift.ps1\n.\\Stop-Reasift.ps1\n.\\Start-Reasift.ps1`}</pre>
+                <p>
+                  Use an account with licensed live access to GLBX.MDP3. After
+                  restarting, click Start monitoring. Reasift then resolves NQ
+                  and GC, loads warm-up history, and watches for breakouts
+                  automatically. Historical requests stay subject to your local
+                  spending allowance.
                 </p>
                 <p className="muted">
                   API keys stay on the backend. No subscription is purchased by

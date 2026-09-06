@@ -1,5 +1,35 @@
 import { test, expect } from "@playwright/test";
 
+test("setup shows real blockers and larger text persists", async ({ page }) => {
+  await page.goto("/");
+  const readiness = page.getByRole("region", { name: "MVP readiness" });
+  await expect(readiness).toBeVisible();
+  await expect(
+    readiness.getByText("Databento access needs configuration"),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Start monitoring", exact: true }),
+  ).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Connection setup", exact: true })
+    .click();
+  await expect(page.getByText(/Configure-Reasift.ps1/)).toBeVisible();
+  await page.getByLabel("Text and interface size").selectOption("extra");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-text-size", "extra");
+  expect(
+    await page
+      .locator("html")
+      .evaluate((element) => getComputedStyle(element).fontSize),
+  ).toBe("18px");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+});
+
 test("a labeled synthetic UI fixture links a signal to its chart and paper outcome", async ({
   page,
 }) => {

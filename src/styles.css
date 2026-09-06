@@ -4,7 +4,7 @@
   background: #f3f5f8;
   font-synthesis: none;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   --muted: #7b8a99;
   --line: #e6ebf0;
   --blue: #4568a4;
@@ -14,6 +14,95 @@
 }
 * {
   box-sizing: border-box;
+}
+:root[data-text-size="extra"] {
+  font-size: 18px;
+}
+body {
+  line-height: 1.5;
+}
+.readiness-panel {
+  background: #fff;
+  border: 1px solid #cbd8e7;
+  border-left: 4px solid var(--blue);
+  border-radius: 8px;
+  margin-bottom: 24px;
+  padding: 26px;
+}
+.readiness-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+}
+.readiness-heading h2 {
+  font-size: 1.4rem;
+  margin: 8px 0;
+}
+.readiness-heading p {
+  color: #51677d;
+  font-size: 1rem;
+  max-width: 760px;
+}
+.readiness-heading .button {
+  flex-shrink: 0;
+}
+.readiness-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 22px;
+  gap: 24px;
+}
+.readiness-steps li {
+  display: flex;
+  gap: 12px;
+}
+.readiness-steps svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #8293a6;
+}
+.readiness-steps .complete svg {
+  color: var(--green);
+}
+.readiness-steps strong {
+  font-size: 1rem;
+}
+.readiness-steps p,
+.readiness-footnote {
+  font-size: 0.875rem;
+  color: #596d82;
+  line-height: 1.7;
+}
+.readiness-steps p {
+  margin-top: 5px;
+}
+.readiness-footnote {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.display-setting {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 28px;
+  font-weight: 600;
+}
+.display-setting select {
+  padding: 12px;
+  border: 1px solid #cbd8e7;
+  border-radius: 5px;
+  color: #27394c;
+  background: #fff;
+}
+.setup-command {
+  background: #edf2f7;
+  padding: 18px;
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.9;
 }
 body {
   margin: 0;
@@ -61,7 +150,7 @@ button svg {
   min-height: 100vh;
 }
 .sidebar {
-  width: 240px;
+  width: 280px;
   background: var(--nav);
   color: #a9b7c6;
   padding: 31px 18px 0;
@@ -70,9 +159,10 @@ button svg {
   display: flex;
   flex-direction: column;
   z-index: 5;
+  overflow-y: auto;
 }
 .brand {
-  font-size: 30px;
+  font-size: 2.25rem;
   font-weight: 650;
   letter-spacing: -1.5px;
   text-decoration: none;
@@ -99,7 +189,7 @@ button svg {
   margin: 25px 10px 37px;
   display: flex;
   align-items: center;
-  font-size: 10px;
+  font-size: 0.875rem;
   gap: 7px;
   white-space: nowrap;
 }
@@ -107,7 +197,7 @@ button svg {
   border: 1px solid #435162;
   border-radius: 4px;
   padding: 2px 4px;
-  font-size: 8px;
+  font-size: 0.75rem;
   color: #c0cddb;
   margin-left: auto;
   letter-spacing: 0.8px;
@@ -121,7 +211,7 @@ button svg {
   flex-shrink: 0;
 }
 .nav-label {
-  font-size: 9px;
+  font-size: 0.75rem;
   letter-spacing: 1.6px;
   font-weight: 650;
   color: #71869a;
@@ -139,7 +229,7 @@ button svg {
   border-radius: 7px;
   margin: 3px 0;
   text-align: left;
-  font-size: 12px;
+  font-size: 1rem;
   font-weight: 500;
 }
 .nav-item:hover {
@@ -161,7 +251,7 @@ button svg {
   background: #456083;
   border-radius: 4px;
   padding: 1px 5px;
-  font-size: 10px;
+  font-size: 0.875rem;
 }
 .instruments-label {
   margin-top: 37px;
@@ -187,11 +277,11 @@ button svg {
 }
 .instrument-nav strong {
   font-weight: 500;
-  font-size: 11px;
+  font-size: 0.875rem;
 }
 .instrument-nav small {
   display: block;
-  font-size: 9px;
+  font-size: 0.75rem;
   color: #798ea1;
   margin-top: 4px;
 }
@@ -203,7 +293,7 @@ button svg {
   place-items: center;
   background: #334a65;
   color: #b3c9e8;
-  font-size: 11px;
+  font-size: 0.875rem;
   font-weight: 650;
   flex-shrink: 0;
 }
@@ -214,7 +304,7 @@ button svg {
 .ticker-badge.large {
   width: 42px;
   height: 44px;
-  font-size: 14px;
+  font-size: 1rem;
   background: #e9eff9;
   color: #46669a;
 }
@@ -237,13 +327,13 @@ button svg {
 }
 .paper-note strong {
   display: block;
-  font-size: 11px;
+  font-size: 0.875rem;
   color: #c7d3df;
   font-weight: 500;
   line-height: 1.5;
 }
 .paper-note p {
-  font-size: 10px;
+  font-size: 0.875rem;
   color: #7f93a7;
   line-height: 1.8;
   margin-top: 7px;
@@ -255,7 +345,7 @@ button svg {
   align-items: center;
   gap: 10px;
   border-top: 1px solid #2b3c4e;
-  font-size: 11px;
+  font-size: 0.875rem;
   color: #cfdae5;
 }
 .profile > span:first-child {
@@ -265,20 +355,20 @@ button svg {
   height: 30px;
   display: grid;
   place-items: center;
-  font-size: 10px;
+  font-size: 0.875rem;
 }
 .profile small {
   display: block;
   color: #7e93a8;
-  font-size: 9px;
+  font-size: 0.75rem;
   margin-top: 4px;
 }
 .profile > .small-dot {
   margin-left: auto;
 }
 main {
-  margin-left: 240px;
-  width: calc(100% - 240px);
+  margin-left: 280px;
+  width: calc(100% - 280px);
 }
 .topbar {
   height: 70px;
@@ -288,7 +378,7 @@ main {
   align-items: center;
   justify-content: space-between;
   padding: 0 38px;
-  font-size: 11px;
+  font-size: 0.875rem;
 }
 .topbar > div,
 .topbar-right {
@@ -307,13 +397,13 @@ main {
   color: #596d82;
 }
 .market-clock small {
-  font-size: 8px;
+  font-size: 0.75rem;
   letter-spacing: 1px;
   margin-left: 7px;
   color: #95a1ad;
 }
 .paper-pill {
-  font-size: 8px;
+  font-size: 0.75rem;
   letter-spacing: 1.1px;
   color: #54758f;
   background: #eef3f7;
@@ -323,8 +413,8 @@ main {
   margin-left: 8px;
 }
 .icon-button {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   background: transparent;
@@ -357,20 +447,20 @@ main {
   gap: 15px;
 }
 .eyebrow {
-  font-size: 8px;
+  font-size: 0.75rem;
   letter-spacing: 1.8px;
   color: #8d9bae;
   font-weight: 650;
   margin-bottom: 8px;
 }
 h1 {
-  font-size: 27px;
+  font-size: 2rem;
   font-weight: 550;
   letter-spacing: -0.85px;
   color: #283c50;
 }
 .page-heading p {
-  font-size: 11px;
+  font-size: 0.875rem;
   color: #8492a1;
   margin-top: 9px;
   line-height: 1.6;
@@ -381,7 +471,7 @@ h1 {
   justify-content: center;
   gap: 7px;
   font-weight: 550;
-  font-size: 10px;
+  font-size: 0.875rem;
   padding: 10px 13px;
   border-radius: 5px;
   white-space: nowrap;
@@ -424,19 +514,19 @@ h1 {
   flex: 1;
 }
 .connection-strip strong {
-  font-size: 11px;
+  font-size: 0.875rem;
   font-weight: 600;
   display: block;
   margin-bottom: 4px;
 }
 .connection-strip > div > span {
-  font-size: 10px;
+  font-size: 0.875rem;
   color: #8090a1;
   line-height: 1.5;
 }
 .state-label {
   text-transform: uppercase;
-  font-size: 8px;
+  font-size: 0.75rem;
   letter-spacing: 0.8px;
   color: #8193a5;
   max-width: 100px;
@@ -458,13 +548,13 @@ h1 {
   border: 0;
 }
 .stat > span {
-  font-size: 8px;
+  font-size: 0.75rem;
   letter-spacing: 1.2px;
   color: #8c9aaa;
   font-weight: 600;
 }
 .stat > strong {
-  font-size: 24px;
+  font-size: 1.8125rem;
   font-weight: 550;
   display: block;
   letter-spacing: -0.6px;
@@ -472,7 +562,7 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 .stat > small {
-  font-size: 9px;
+  font-size: 0.75rem;
   color: #93a0ae;
   line-height: 1.5;
 }
@@ -493,12 +583,12 @@ h1 {
   border-bottom: 1px solid var(--line);
 }
 h2 {
-  font-size: 13px;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.15px;
 }
 .panel-heading span:not(.ticker-badge):not(.status-tag) {
-  font-size: 9px;
+  font-size: 0.75rem;
   color: #92a0ae;
 }
 .panel-heading h2 + span {
@@ -507,7 +597,7 @@ h2 {
 }
 .market-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 285px;
+  grid-template-columns: minmax(0, 1fr) 340px;
   gap: 21px;
 }
 .market-title {
@@ -516,7 +606,7 @@ h2 {
   gap: 11px;
 }
 .market-title h2 {
-  font-size: 14px;
+  font-size: 1rem;
 }
 .market-title > div > span {
   display: block;
@@ -525,7 +615,7 @@ h2 {
 .timeframe {
   background: #f1f4f8;
   border: 1px solid #e2e8ee;
-  font-size: 10px;
+  font-size: 0.875rem;
   border-radius: 4px;
   padding: 6px 9px;
 }
@@ -539,19 +629,19 @@ h2 {
   padding: 19px 22px 5px;
 }
 .price-row > strong {
-  font-size: 28px;
+  font-size: 2.125rem;
   letter-spacing: -0.7px;
   font-weight: 550;
   font-variant-numeric: tabular-nums;
 }
 .price-row > span {
-  font-size: 9px;
+  font-size: 0.75rem;
 }
 .price-row > div {
   margin-left: auto;
   display: flex;
   gap: 16px;
-  font-size: 8px;
+  font-size: 0.75rem;
   letter-spacing: 0.3px;
   color: #8a99a8;
 }
@@ -560,11 +650,11 @@ h2 {
   margin-top: 5px;
   color: #5d6e80;
   font-weight: 500;
-  font-size: 10px;
+  font-size: 0.875rem;
 }
 .chart-container {
   position: relative;
-  height: 335px;
+  height: 420px;
   margin: 5px 10px 0;
 }
 .chart {
@@ -599,19 +689,19 @@ h2 {
   margin-bottom: 20px;
 }
 .chart-empty h3 {
-  font-size: 15px;
+  font-size: 1.125rem;
   font-weight: 500;
   letter-spacing: -0.2px;
 }
 .chart-empty p {
-  font-size: 10px;
+  font-size: 0.875rem;
   color: #8999aa;
   margin-top: 9px;
   max-width: 260px;
   line-height: 1.8;
 }
 .chart-empty > span {
-  font-size: 8px;
+  font-size: 0.75rem;
   color: #a2afbc;
   margin-top: 20px;
 }
@@ -621,7 +711,7 @@ h2 {
   justify-content: space-between;
   gap: 8px;
   border-top: 1px solid var(--line);
-  font-size: 8px;
+  font-size: 0.75rem;
   color: #94a1af;
 }
 .chart-footer .small-dot {
@@ -632,7 +722,7 @@ h2 {
 }
 .chart-footer a {
   text-decoration: none;
-  font-size: 8px;
+  font-size: 0.75rem;
 }
 .insight-panel .panel-heading svg {
   color: #8c9eb2;
@@ -642,7 +732,7 @@ h2 {
 }
 .direction-tag {
   display: inline-block;
-  font-size: 8px;
+  font-size: 0.75rem;
   letter-spacing: 1px;
   text-transform: uppercase;
   border: 1px solid #dfe6ed;
@@ -660,14 +750,14 @@ h2 {
   background: #fbf0ef;
 }
 .insight-body h3 {
-  font-size: 16px;
+  font-size: 1.1875rem;
   font-weight: 550;
   line-height: 1.45;
   margin: 14px 0 10px;
   letter-spacing: -0.4px;
 }
 .insight-body p {
-  font-size: 10px;
+  font-size: 0.875rem;
   line-height: 1.85;
   color: #8797a8;
 }
@@ -677,7 +767,7 @@ h2 {
 .warmup > div {
   display: flex;
   justify-content: space-between;
-  font-size: 8px;
+  font-size: 0.75rem;
   color: #93a0ae;
 }
 .warmup strong {
@@ -707,14 +797,14 @@ progress::-webkit-progress-value {
   border-top: 1px solid var(--line);
 }
 .insight-rule > span {
-  font-size: 8px;
+  font-size: 0.75rem;
   color: #99a5b1;
   letter-spacing: 1px;
   display: block;
   margin-bottom: 7px;
 }
 .insight-rule strong {
-  font-size: 11px;
+  font-size: 0.875rem;
   font-weight: 550;
 }
 .insight-rule p {
@@ -732,17 +822,17 @@ progress::-webkit-progress-value {
 }
 .no-setup strong {
   display: block;
-  font-size: 10px;
+  font-size: 0.875rem;
   font-weight: 550;
   margin-bottom: 5px;
 }
 .no-setup p {
-  font-size: 9px;
+  font-size: 0.75rem;
 }
 .text-button {
   background: transparent;
   color: #6284ad;
-  font-size: 10px;
+  font-size: 0.875rem;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -757,7 +847,7 @@ table {
   white-space: nowrap;
 }
 th {
-  font-size: 8px;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.7px;
   color: #95a1af;
@@ -768,7 +858,7 @@ th {
 }
 td {
   padding: 15px 20px;
-  font-size: 10px;
+  font-size: 0.875rem;
   color: #758699;
   border-bottom: 1px solid #edf1f4;
   font-variant-numeric: tabular-nums;
@@ -776,7 +866,7 @@ td {
 td small {
   display: block;
   margin-top: 4px;
-  font-size: 8px;
+  font-size: 0.75rem;
   color: #a1adba;
 }
 td strong {
@@ -798,7 +888,7 @@ td strong {
   color: var(--red);
 }
 .status-tag {
-  font-size: 8px;
+  font-size: 0.75rem;
   padding: 4px 7px;
   background: #f1f4f7;
   border: 1px solid #e4eaf0;
@@ -817,12 +907,12 @@ td strong {
   margin-bottom: 13px;
 }
 .empty h3 {
-  font-size: 12px;
+  font-size: 1rem;
   font-weight: 500;
   color: #61758b;
 }
 .empty p {
-  font-size: 10px;
+  font-size: 0.875rem;
   color: #94a2b1;
   max-width: 440px;
   margin: 8px auto 0;
@@ -832,7 +922,7 @@ td strong {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  font-size: 8px;
+  font-size: 0.75rem;
   color: #95a2b0;
   padding: 2px 0 5px;
 }
@@ -851,7 +941,7 @@ td strong {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 11px;
+  font-size: 0.875rem;
   line-height: 1.6;
 }
 .banner.error {
@@ -873,7 +963,7 @@ dl > div {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  font-size: 10px;
+  font-size: 0.875rem;
   border-bottom: 1px solid #edf1f4;
   padding: 11px 0;
 }
@@ -903,7 +993,7 @@ dd {
   gap: 30px;
 }
 .performance-grid h3 {
-  font-size: 13px;
+  font-size: 1rem;
   font-weight: 550;
 }
 .evaluation-intro {
@@ -917,7 +1007,7 @@ dd {
   color: #597a9d;
 }
 .evaluation-intro p {
-  font-size: 11px;
+  font-size: 0.875rem;
   color: #8194a9;
   margin-top: 7px;
   line-height: 1.6;
@@ -926,17 +1016,17 @@ dd {
   grid-template-columns: repeat(3, 1fr);
 }
 .phase-grid h3 {
-  font-size: 16px;
+  font-size: 1.1875rem;
   font-weight: 500;
   line-height: 1.8;
   font-variant-numeric: tabular-nums;
 }
 .phase-grid h3 > span {
-  font-size: 10px;
+  font-size: 0.875rem;
   color: #9cabbb;
 }
 .phase-grid p {
-  font-size: 10px;
+  font-size: 0.875rem;
   color: #899aab;
   margin-top: 10px;
 }
@@ -951,7 +1041,7 @@ dd {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 10px;
+  font-size: 0.875rem;
   color: #8393a4;
   flex: 1;
   min-width: 120px;
@@ -963,7 +1053,7 @@ select {
   padding: 9px;
   color: #58708a;
   background: #fff;
-  font-size: 11px;
+  font-size: 0.875rem;
   min-width: 0;
 }
 .recordings {
@@ -983,13 +1073,13 @@ select {
   flex: 1;
 }
 .recordings strong {
-  font-size: 11px;
+  font-size: 0.875rem;
   font-weight: 550;
 }
 .recordings small {
   display: block;
   color: #98a7b6;
-  font-size: 9px;
+  font-size: 0.75rem;
   margin-top: 5px;
 }
 .job {
@@ -997,12 +1087,12 @@ select {
   border-top: 1px solid var(--line);
 }
 .job > strong {
-  font-size: 11px;
+  font-size: 0.875rem;
   font-weight: 500;
   margin-left: 10px;
 }
 .job > p {
-  font-size: 10px;
+  font-size: 0.875rem;
   margin-top: 9px;
 }
 .scenario-grid {
@@ -1017,18 +1107,18 @@ select {
   border-radius: 5px;
 }
 .scenario-grid span {
-  font-size: 9px;
+  font-size: 0.75rem;
   color: #8092a4;
   text-transform: capitalize;
 }
 .scenario-grid strong {
-  font-size: 19px;
+  font-size: 1.4375rem;
   font-weight: 500;
   display: block;
   margin: 9px 0;
 }
 .scenario-grid small {
-  font-size: 9px;
+  font-size: 0.75rem;
   color: #96a4b3;
 }
 .drawer-backdrop {
@@ -1040,7 +1130,7 @@ select {
   justify-content: flex-end;
 }
 .drawer {
-  width: 410px;
+  width: 540px;
   max-width: 100%;
   height: 100%;
   background: #fff;
@@ -1053,10 +1143,10 @@ select {
 }
 .notification-list small {
   color: #8b9bad;
-  font-size: 9px;
+  font-size: 0.75rem;
 }
 .notification-list p {
-  font-size: 12px;
+  font-size: 1rem;
   line-height: 1.7;
   margin-top: 7px;
 }
@@ -1064,17 +1154,17 @@ select {
   padding: 25px;
 }
 .settings-body h3 {
-  font-size: 14px;
+  font-size: 1rem;
   font-weight: 550;
 }
 .settings-body p {
-  font-size: 11px;
+  font-size: 0.875rem;
   line-height: 1.9;
   margin: 15px 0;
   color: #7c8fa3;
 }
 code {
-  font-size: 10px;
+  font-size: 0.875rem;
   background: #edf2f7;
   padding: 2px 4px;
   border-radius: 3px;
@@ -1087,7 +1177,7 @@ code {
   padding: 20px 0;
   border-block: 1px solid var(--line);
   margin-top: 25px;
-  font-size: 12px;
+  font-size: 1rem;
 }
 .toggle-row input {
   accent-color: #5477a8;
@@ -1101,26 +1191,26 @@ code {
 }
 @media (min-width: 1500px) {
   .chart-container {
-    height: 390px;
+    height: 460px;
   }
   .content {
     padding-top: 40px;
   }
   .market-layout {
-    grid-template-columns: minmax(0, 1fr) 315px;
+    grid-template-columns: minmax(0, 1fr) 360px;
   }
   .insight-body {
     padding: 25px;
   }
 }
-@media (max-width: 1150px) {
+@media (max-width: 1350px) {
   .sidebar {
-    width: 205px;
+    width: 240px;
     padding-inline: 12px;
   }
   main {
-    margin-left: 205px;
-    width: calc(100% - 205px);
+    margin-left: 240px;
+    width: calc(100% - 240px);
   }
   .content {
     padding: 25px;
@@ -1129,14 +1219,14 @@ code {
     padding-inline: 25px;
   }
   .market-layout {
-    grid-template-columns: minmax(0, 1fr) 240px;
+    grid-template-columns: 1fr;
     gap: 15px;
   }
   .stat {
     padding: 0 15px;
   }
   .stat > strong {
-    font-size: 21px;
+    font-size: 1.5625rem;
   }
   .profile {
     margin-inline: -12px;
@@ -1157,12 +1247,18 @@ code {
     display: none;
   }
 }
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+  .readiness-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .readiness-heading {
+    flex-wrap: wrap;
+  }
   .sidebar {
-    width: 175px;
+    width: 220px;
   }
   .brand {
-    font-size: 25px;
+    font-size: 1.875rem;
   }
   .brand-mark {
     width: 29px;
@@ -1170,14 +1266,14 @@ code {
     margin-right: 7px;
   }
   .workspace-tag {
-    font-size: 8px;
+    font-size: 0.75rem;
   }
   .workspace-tag > span:last-child {
     display: none;
   }
   main {
-    margin-left: 175px;
-    width: calc(100% - 175px);
+    margin-left: 220px;
+    width: calc(100% - 220px);
   }
   .market-layout {
     grid-template-columns: 1fr;
@@ -1193,7 +1289,7 @@ code {
     border: 0;
   }
   .page-heading h1 {
-    font-size: 23px;
+    font-size: 1.75rem;
   }
   .connection-strip {
     flex-wrap: wrap;
@@ -1211,13 +1307,19 @@ code {
     gap: 15px;
   }
   .phase-grid h3 {
-    font-size: 12px;
+    font-size: 1rem;
   }
   .page-footer > span:last-child {
     display: none;
   }
 }
 @media (max-width: 640px) {
+  .readiness-panel {
+    padding: 20px;
+  }
+  .readiness-steps {
+    grid-template-columns: 1fr;
+  }
   .sidebar {
     position: static;
     width: 100%;
@@ -1228,7 +1330,7 @@ code {
     display: block;
   }
   .brand {
-    font-size: 24px;
+    font-size: 1.8125rem;
     padding: 0;
   }
   .workspace-tag,
@@ -1239,11 +1341,13 @@ code {
   }
   .sidebar nav {
     display: flex;
+    flex-wrap: wrap;
     gap: 4px;
     margin-top: 14px;
   }
   .nav-item {
-    font-size: 10px;
+    width: calc(50% - 2px);
+    font-size: 0.875rem;
     padding: 10px 8px;
     gap: 6px;
     justify-content: center;
@@ -1272,10 +1376,10 @@ code {
     display: none;
   }
   h1 {
-    font-size: 22px !important;
+    font-size: 1.75rem !important;
   }
   .page-heading p {
-    font-size: 10px;
+    font-size: 0.875rem;
   }
   .connection-strip {
     padding: 13px;
@@ -1284,16 +1388,23 @@ code {
     min-width: 200px;
   }
   .stat > strong {
-    font-size: 22px;
+    font-size: 1.625rem;
   }
   .chart-container {
     height: 300px;
   }
   .price-row > div {
-    font-size: 7px;
+    font-size: 0.75rem;
+  }
+  .price-row {
+    flex-wrap: wrap;
+  }
+  .chart-footer {
+    flex-wrap: wrap;
+    gap: 10px;
   }
   .market-title h2 {
-    font-size: 12px;
+    font-size: 1rem;
   }
   .panel-heading > span {
     max-width: 130px;
@@ -1305,7 +1416,7 @@ code {
     gap: 20px;
   }
   .phase-grid h3 {
-    font-size: 16px;
+    font-size: 1.1875rem;
   }
   .performance-grid {
     grid-template-columns: 1fr;
@@ -1323,7 +1434,7 @@ code {
     gap: 5px !important;
   }
   .paper-pill {
-    font-size: 7px;
+    font-size: 0.75rem;
   }
   .chart-footer {
     padding-inline: 12px;

@@ -336,6 +336,36 @@ export interface components {
       /** Multiplier */
       multiplier: number;
     };
+    /** ProductReadiness */
+    ProductReadiness: {
+      /** Contract Resolved */
+      contract_resolved: boolean;
+      /** Completed Bars */
+      completed_bars: number;
+      /** Required Bars */
+      required_bars: number;
+      /** Quote Fresh */
+      quote_fresh: boolean;
+      /** Context Ready */
+      context_ready: boolean;
+    };
+    /** Readiness */
+    Readiness: {
+      /** Products */
+      products: {
+        [key: string]: components["schemas"]["ProductReadiness"];
+      };
+      /** Entry Window Open */
+      entry_window_open: boolean;
+      /** Session Open */
+      session_open: string | null;
+      /** Session Close */
+      session_close: string | null;
+      /** Watching For Signals */
+      watching_for_signals: boolean;
+      /** Next Action */
+      next_action: string;
+    };
     /** ReplayRequest */
     ReplayRequest: {
       /** Recording Id */
@@ -501,6 +531,7 @@ export interface components {
       event_cursor: number;
       /** Data Configured */
       data_configured: boolean;
+      readiness: components["schemas"]["Readiness"];
       /**
        * Paper Only
        * @default true

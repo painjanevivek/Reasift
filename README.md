@@ -1,26 +1,23 @@
 # Reasift Frontend
 
-This repository is the home for Reasift's frontend: its user interface and client-side application code.
+A private local futures research desk built with React, TypeScript, Vite and Lightweight Charts. Markets, Signals, Paper account and Evaluation show real observations and explicitly missing data. No synthetic market feed is used by the application.
 
-## Repositories
-
-- **Frontend:** [painjanevivek/Reasift](https://github.com/painjanevivek/Reasift)
-- **Backend:** [painjanevivek/Reasift-backend](https://github.com/painjanevivek/Reasift-backend)
-
-## Project status
-
-The repository has been initialized. Application code, framework selection, and setup instructions will be added as development begins.
-
-## Local workspace
-
-The frontend lives in `D:\Work\Project\Dev\Reasift\Frontend` and has its own Git history. Keep frontend changes in this folder and commit and push them from here.
+## Build
 
 ```powershell
 cd D:\Work\Project\Dev\Reasift\Frontend
-git status
-git add README.md # Replace with the files you intend to commit.
-git commit -m "Describe the frontend change"
-git push
+npm ci
+npm run build
+npm test
+npm run test:e2e
 ```
 
-The `main` branch tracks `origin/main` in the frontend repository. Commit backend changes separately in the backend repository.
+The backend's `Start-Reasift.ps1` launches the app at **http://127.0.0.1:8765** and serves this repository's `dist`. Browser tests use installed Chrome. For Vite development enable `REASIFT_DEV=true` on the backend, then run `npm run dev`.
+
+API types are generated from Backend/openapi.json: export it in Backend, then run `npm run api:generate` here. Do not manually edit `src/generated/api.ts`.
+
+[Backend setup and operations](https://github.com/painjanevivek/Reasift-backend) own the data key, worker, strategy and ledger. Never put provider keys in frontend environment variables or browser storage.
+
+Charts use [TradingView Lightweight Charts](https://www.tradingview.com/lightweight-charts/); visible attribution and the library attribution logo are retained.
+
+Commit and push frontend changes from this repository only. Builds, dependencies, screenshots and test artifacts are ignored.

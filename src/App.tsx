@@ -80,18 +80,27 @@ export default function App() {
     }
   }, [textSize]);
   const refresh = useCallback(async () => {
-    const [s, ts, p, e, ss] = await Promise.all([
-      api<Snapshot>("snapshot"),
-      api<Trade[]>("trades"),
-      api<Performance>("performance"),
-      api<Evaluation>("evaluation"),
-      api<Signal[]>("signals"),
-    ]);
-    setSnapshot(s);
-    setTrades(ts);
-    setPerformance(p);
-    setEvaluation(e);
-    setSignals(ss);
+    try {
+      const [s, ts, p, e, ss] = await Promise.all([
+        api<Snapshot>("snapshot"),
+        api<Trade[]>("trades"),
+        api<Performance>("performance"),
+        api<Evaluation>("evaluation"),
+        api<Signal[]>("signals"),
+      ]);
+      setSnapshot(s);
+      setTrades(ts);
+      setPerformance(p);
+      setEvaluation(e);
+      setSignals(ss);
+    } catch (failure) {
+      setSnapshot(null);
+      setPerformance(null);
+      setTrades([]);
+      setSignals([]);
+      setError((failure as Error).message);
+      throw failure;
+    }
   }, []);
   useEffect(() => {
     let cancelled = false,
@@ -128,7 +137,10 @@ export default function App() {
             void refresh().catch(() => {});
         };
         socket.onclose = () => {
-          if (!cancelled) retry = setTimeout(connect, 2500);
+          if (!cancelled) {
+            setSnapshot(null);
+            retry = setTimeout(connect, 2500);
+          }
         };
         setError("");
       } catch (e) {
@@ -646,6 +658,9 @@ export default function App() {
               {snapshot?.halted && (
                 <div className="banner error">
                   Paper execution is paused by a risk or data-integrity gate.
+                  {snapshot.feed.state === "blocked" && (
+                    <span> {String(snapshot.feed.reason)}</span>
+                  )}
                 </div>
               )}
               <section className="panel">

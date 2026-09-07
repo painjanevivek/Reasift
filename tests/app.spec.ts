@@ -1,5 +1,24 @@
 import { test, expect } from "@playwright/test";
 
+test("account integrity failure removes previously displayed account values", async ({
+  page,
+}) => {
+  await page.routeWebSocket(/api\/v1\/stream/, () => {});
+  await page.goto("/");
+  await expect(page.getByText("$100,000.00")).toBeVisible();
+  await page.route("**/api/v1/snapshot", (route) =>
+    route.fulfill({
+      status: 503,
+      json: { detail: "Account integrity failure: recovery review required." },
+    }),
+  );
+  await page.getByRole("button", { name: "Refresh", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText(
+    "Account integrity failure",
+  );
+  await expect(page.getByText("$100,000.00")).toHaveCount(0);
+});
+
 test("setup shows real blockers and larger text persists", async ({ page }) => {
   await page.goto("/");
   const readiness = page.getByRole("region", { name: "MVP readiness" });

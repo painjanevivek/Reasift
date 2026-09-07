@@ -18,6 +18,8 @@ The backend's `Start-Reasift.ps1` launches the app at **http://127.0.0.1:8765** 
 
 API types are generated from Backend/openapi.json: export it in Backend, then run `npm run api:generate` here. Do not manually edit `src/generated/api.ts`.
 
+An account-integrity or refresh failure clears displayed account values and shows the backend error. Persistent recovery locks display their reason and survive worker restarts; restarting the browser does not clear them. The [backend adoption review](https://github.com/painjanevivek/Reasift-backend/blob/main/docs/ADOPTION_REVIEW_2026-09-07.md) records which lessons from the supplied research were implemented.
+
 [Backend setup and operations](https://github.com/painjanevivek/Reasift-backend) own the data key, worker, strategy and ledger. Never put provider keys in frontend environment variables or browser storage.
 
 Charts use [TradingView Lightweight Charts](https://www.tradingview.com/lightweight-charts/); visible attribution and the library attribution logo are retained.

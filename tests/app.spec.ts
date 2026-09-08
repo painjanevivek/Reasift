@@ -110,7 +110,7 @@ test("a labeled synthetic UI fixture links a signal to its chart and paper outco
     route.fulfill({ json: bars }),
   );
   await page.goto("/");
-  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: /^Inspect/ }).click();
   await expect(page.getByText(signal.reason)).toBeVisible();
   await expect(page.locator("canvas").first()).toBeVisible();
   await page.getByRole("button", { name: "View paper ledger" }).click();

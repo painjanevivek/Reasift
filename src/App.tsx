@@ -1,8 +1,13 @@
-import { useEffect, useState, useCallback } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Activity,
-  ArrowDownRight,
-  ArrowUpRight,
   Bell,
   BookOpen,
   ChartNoAxesCombined,
@@ -20,7 +25,8 @@ import {
   Wallet,
   X,
 } from "lucide-react";
-import Chart from "./Chart";
+import { ChartLoading, Empty, SignalTable, Stat } from "./components/Display";
+import HistoryForm from "./components/HistoryForm";
 import Readiness from "./Readiness";
 import {
   api,
@@ -37,6 +43,8 @@ import {
   type Event,
 } from "./api";
 
+const Chart = lazy(() => import("./Chart"));
+
 type View = "Markets" | "Signals" | "Paper account" | "Evaluation";
 const views = [
   { name: "Markets", icon: ChartNoAxesCombined },
@@ -48,6 +56,7 @@ const names = { NQ: "Nasdaq-100", GC: "Gold" };
 
 export default function App() {
   const [view, setView] = useState<View>("Markets");
+  const viewRef = useRef<View>("Markets");
   const [product, setProduct] = useState<"NQ" | "GC">("NQ");
   const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
   const [bars, setBars] = useState<Candle[]>([]);
@@ -61,6 +70,7 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [drawer, setDrawer] = useState<"alerts" | "settings" | null>(null);
+  const drawerTriggerRef = useRef<HTMLElement | null>(null);
   const [clock, setClock] = useState(new Date());
   const [textSize, setTextSize] = useState(() => {
     try {
@@ -79,25 +89,66 @@ export default function App() {
       /* Browser storage may be disabled. */
     }
   }, [textSize]);
-  const refresh = useCallback(async () => {
+  useEffect(() => {
+    if (!drawer) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDrawer(null);
+        queueMicrotask(() => drawerTriggerRef.current?.focus());
+      }
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [drawer]);
+  const openDrawer = (next: "alerts" | "settings") => {
+    drawerTriggerRef.current =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    setDrawer(next);
+  };
+  const closeDrawer = () => {
+    setDrawer(null);
+    queueMicrotask(() => drawerTriggerRef.current?.focus());
+  };
+  const refresh = useCallback(async (target: View = viewRef.current) => {
     try {
-      const [s, ts, p, e, ss] = await Promise.all([
-        api<Snapshot>("snapshot"),
-        api<Trade[]>("trades"),
-        api<Performance>("performance"),
-        api<Evaluation>("evaluation"),
-        api<Signal[]>("signals"),
+      const snapshotRequest = api<Snapshot>("snapshot");
+      const signalsRequest = api<Signal[]>("signals");
+      const tradesRequest =
+        target === "Markets" || target === "Paper account"
+          ? api<Trade[]>("trades")
+          : null;
+      const performanceRequest =
+        target === "Markets" || target === "Paper account"
+          ? api<Performance>("performance")
+          : null;
+      const evaluationRequest =
+        target === "Markets" || target === "Evaluation"
+          ? api<Evaluation>("evaluation")
+          : null;
+      const [s, ss, ts, p, e] = await Promise.all([
+        snapshotRequest,
+        signalsRequest,
+        tradesRequest,
+        performanceRequest,
+        evaluationRequest,
       ]);
       setSnapshot(s);
-      setTrades(ts);
-      setPerformance(p);
-      setEvaluation(e);
       setSignals(ss);
+      if (ts) setTrades(ts);
+      if (p) setPerformance(p);
+      if (e) setEvaluation(e);
     } catch (failure) {
       setSnapshot(null);
-      setPerformance(null);
-      setTrades([]);
       setSignals([]);
+      if (target === "Markets" || target === "Paper account") {
+        setPerformance(null);
+      }
+      if (target === "Markets" || target === "Paper account") setTrades([]);
+      if (target === "Markets" || target === "Evaluation") {
+        setEvaluation(null);
+      }
       setError((failure as Error).message);
       throw failure;
     }
@@ -114,13 +165,21 @@ export default function App() {
         if (cancelled) return;
         const history = await api<Event[]>("events");
         setEvents(history.reverse());
+        const socketProtocol = location.protocol === "https:" ? "wss:" : "ws:";
         socket = new WebSocket(
-          `ws://${location.host}/api/v1/stream?after=${cursor}`,
+          `${socketProtocol}//${location.host}/api/v1/stream?after=${cursor}`,
         );
         socket.onmessage = (message) => {
-          const event = JSON.parse(message.data);
+          let event: Event;
+          try {
+            event = JSON.parse(message.data) as Event;
+            if (!event || typeof event.kind !== "string") return;
+          } catch {
+            setError("The live event stream returned an invalid message.");
+            return;
+          }
           if (event.kind === "snapshot") {
-            setSnapshot(event.payload);
+            setSnapshot(event.payload as Snapshot);
             return;
           }
           cursor = Math.max(cursor, event.seq || 0);
@@ -134,7 +193,7 @@ export default function App() {
               event.kind,
             )
           )
-            void refresh().catch(() => {});
+            void refresh(viewRef.current).catch(() => {});
         };
         socket.onclose = () => {
           if (!cancelled) {
@@ -160,6 +219,10 @@ export default function App() {
     };
   }, [refresh]);
   useEffect(() => {
+    if (view !== "Markets") {
+      setBars([]);
+      return;
+    }
     let active = true;
     const load = () =>
       api<Candle[]>(`candles/${product}`)
@@ -174,13 +237,13 @@ export default function App() {
       active = false;
       clearInterval(interval);
     };
-  }, [product]);
+  }, [product, view]);
   async function action(path: string, body: unknown, method?: string) {
     setBusy(true);
     setError("");
     try {
       await api(path, body, method);
-      await refresh();
+      await refresh(viewRef.current);
       setNotice("Saved.");
     } catch (e) {
       setError((e as Error).message);
@@ -201,7 +264,14 @@ export default function App() {
   const selectSignal = (s: Signal) => {
     setSelected(s);
     setProduct(s.product);
+    viewRef.current = "Markets";
     setView("Markets");
+    void refresh("Markets").catch(() => {});
+  };
+  const changeView = (next: View) => {
+    viewRef.current = next;
+    setView(next);
+    void refresh(next).catch(() => {});
   };
   const feed = snapshot?.feed.state || "connecting";
   return (
@@ -212,7 +282,7 @@ export default function App() {
           className="brand"
           onClick={(e) => {
             e.preventDefault();
-            setView("Markets");
+            changeView("Markets");
           }}
         >
           <span className="brand-mark">
@@ -229,7 +299,7 @@ export default function App() {
             <button
               key={name}
               className={view === name ? "nav-item active" : "nav-item"}
-              onClick={() => setView(name)}
+              onClick={() => changeView(name)}
             >
               <Icon size={18} />
               {name}
@@ -248,7 +318,7 @@ export default function App() {
             key={p}
             onClick={() => {
               setProduct(p);
-              setView("Markets");
+              changeView("Markets");
               setSelected(null);
             }}
           >
@@ -268,7 +338,7 @@ export default function App() {
             <strong>Research without real orders</strong>
             <p>All trades are simulated. Your results stay on this computer.</p>
           </div>
-          <button className="nav-item" onClick={() => setDrawer("settings")}>
+          <button className="nav-item" onClick={() => openDrawer("settings")}>
             <SlidersHorizontal size={17} />
             Preferences
           </button>
@@ -304,7 +374,7 @@ export default function App() {
             <button
               className="icon-button"
               aria-label="Open notifications"
-              onClick={() => setDrawer("alerts")}
+              onClick={() => openDrawer("alerts")}
             >
               <Bell size={18} />
               {events.length > 0 && <i />}
@@ -336,7 +406,9 @@ export default function App() {
             </div>
             <button
               className="button secondary"
-              onClick={() => void refresh().catch((e) => setError(e.message))}
+              onClick={() =>
+                void refresh(viewRef.current).catch((e) => setError(e.message))
+              }
             >
               <RefreshCw size={15} />
               Refresh
@@ -404,7 +476,7 @@ export default function App() {
               {snapshot && (
                 <Readiness
                   snapshot={snapshot}
-                  openSetup={() => setDrawer("settings")}
+                  openSetup={() => openDrawer("settings")}
                 />
               )}
               <div className="market-stats">
@@ -479,11 +551,13 @@ export default function App() {
                       </span>
                     </div>
                   </div>
-                  <Chart
-                    bars={bars}
-                    signal={focusSignal}
-                    fontSize={textSize === "extra" ? 18 : 16}
-                  />
+                  <Suspense fallback={<ChartLoading />}>
+                    <Chart
+                      bars={bars}
+                      signal={focusSignal}
+                      fontSize={textSize === "extra" ? 18 : 16}
+                    />
+                  </Suspense>
                   <div className="chart-footer">
                     <span>
                       <span className="small-dot" /> Databento · Actual contract
@@ -579,7 +653,7 @@ export default function App() {
                               </p>
                               <button
                                 className="text-button"
-                                onClick={() => setView("Paper account")}
+                                onClick={() => changeView("Paper account")}
                               >
                                 View paper ledger <ChevronRight size={14} />
                               </button>
@@ -610,7 +684,7 @@ export default function App() {
                   </div>
                   <button
                     className="text-button"
-                    onClick={() => setView("Signals")}
+                    onClick={() => changeView("Signals")}
                   >
                     View all <ChevronRight size={15} />
                   </button>
@@ -925,16 +999,23 @@ export default function App() {
         </div>
       </main>
       {drawer && (
-        <div className="drawer-backdrop" onClick={() => setDrawer(null)}>
-          <aside className="drawer" onClick={(e) => e.stopPropagation()}>
+        <div className="drawer-backdrop" onClick={closeDrawer}>
+          <aside
+            className="drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="drawer-title"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="panel-heading">
-              <h2>
+              <h2 id="drawer-title">
                 {drawer === "alerts" ? "Notification history" : "Preferences"}
               </h2>
               <button
                 className="icon-button"
                 aria-label="Close panel"
-                onClick={() => setDrawer(null)}
+                autoFocus
+                onClick={closeDrawer}
               >
                 <X size={19} />
               </button>
@@ -1044,186 +1125,5 @@ export default function App() {
         </div>
       )}
     </div>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  detail,
-}: {
-  label: string;
-  value: string;
-  detail: string;
-}) {
-  return (
-    <div className="stat">
-      <span>{label}</span>
-      <strong>{value}</strong>
-      <small>{detail}</small>
-    </div>
-  );
-}
-function Empty({
-  icon,
-  title,
-  text,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="empty">
-      <div>{icon}</div>
-      <h3>{title}</h3>
-      <p>{text}</p>
-    </div>
-  );
-}
-function SignalTable({
-  signals,
-  onSelect,
-}: {
-  signals: Signal[];
-  onSelect: (s: Signal) => void;
-}) {
-  return signals.length ? (
-    <div className="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th>Time · New York</th>
-            <th>Contract</th>
-            <th>Direction</th>
-            <th>Reference</th>
-            <th>Stop / Target</th>
-            <th>Status</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {signals.map((s) => (
-            <tr key={s.id}>
-              <td>
-                {time(s.ts)}
-                <small>{s.ts.slice(0, 10)}</small>
-              </td>
-              <td>
-                <strong>{s.symbol}</strong>
-              </td>
-              <td>
-                <span className={`trade-direction ${s.direction}`}>
-                  {s.direction === "long" ? (
-                    <ArrowUpRight size={15} />
-                  ) : (
-                    <ArrowDownRight size={15} />
-                  )}{" "}
-                  {s.direction}
-                </span>
-              </td>
-              <td>{number(s.reference)}</td>
-              <td>
-                {number(s.stop)} / {number(s.target)}
-              </td>
-              <td>
-                <span className="status-tag" title={s.rejection || undefined}>
-                  {s.status}
-                </span>
-              </td>
-              <td>
-                <button className="text-button" onClick={() => onSelect(s)}>
-                  Inspect <ChevronRight size={14} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  ) : (
-    <Empty
-      icon={<Activity size={25} />}
-      title="The next setup will appear here."
-      text="Signals include the actual contract, trigger, proposed levels, and the reason for taking or skipping a paper trade."
-    />
-  );
-}
-function HistoryForm({
-  busy,
-  submit,
-  phases,
-}: {
-  busy: boolean;
-  submit: (path: string, body: unknown) => Promise<void>;
-  phases: Record<string, [string, string]>;
-}) {
-  const [product, setProduct] = useState("NQ"),
-    [phase, setPhase] = useState("development"),
-    [start, setStart] = useState(phases.development[0].slice(0, 10)),
-    [end, setEnd] = useState("");
-  return (
-    <section className="panel">
-      <div className="panel-heading">
-        <h2>Request historical data</h2>
-        <span>Maximum 31 days per request · Cost checked before download</span>
-      </div>
-      <form
-        className="history-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          void submit("history", {
-            product,
-            phase,
-            start: `${start}T00:00:00Z`,
-            end: `${end}T00:00:00Z`,
-          });
-        }}
-      >
-        <label>
-          Instrument
-          <select value={product} onChange={(e) => setProduct(e.target.value)}>
-            <option>NQ</option>
-            <option>GC</option>
-          </select>
-        </label>
-        <label>
-          Period
-          <select
-            value={phase}
-            onChange={(e) => {
-              setPhase(e.target.value);
-              setStart(phases[e.target.value][0].slice(0, 10));
-            }}
-          >
-            {Object.keys(phases).map((p) => (
-              <option key={p}>{p}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          From (UTC)
-          <input
-            type="date"
-            required
-            value={start}
-            onChange={(e) => setStart(e.target.value)}
-          />
-        </label>
-        <label>
-          Until (exclusive)
-          <input
-            type="date"
-            required
-            value={end}
-            min={start}
-            onChange={(e) => setEnd(e.target.value)}
-          />
-        </label>
-        <button className="button primary" disabled={busy}>
-          Request data
-        </button>
-      </form>
-    </section>
   );
 }

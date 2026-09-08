@@ -1,14 +1,25 @@
 :root {
   font-family: "Segoe UI", Arial, sans-serif;
-  color: #27394c;
-  background: #f3f5f8;
+  color: var(--text);
+  background: var(--canvas);
   font-synthesis: none;
   font-weight: 400;
   font-size: 16px;
+  color-scheme: light;
+  --canvas: #f3f5f8;
+  --surface: #ffffff;
+  --surface-muted: #edf2f7;
+  --text: #27394c;
+  --text-subtle: #596d82;
   --muted: #7b8a99;
   --line: #e6ebf0;
+  --line-strong: #cbd8e7;
   --blue: #4568a4;
+  --blue-hover: #37598f;
+  --focus: #95b7e4;
   --nav: #192634;
+  --nav-surface: #223344;
+  --nav-text: #a9b7c6;
   --green: #278475;
   --red: #b95e58;
 }
@@ -22,8 +33,8 @@ body {
   line-height: 1.5;
 }
 .readiness-panel {
-  background: #fff;
-  border: 1px solid #cbd8e7;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
   border-left: 4px solid var(--blue);
   border-radius: 8px;
   margin-bottom: 24px;
@@ -73,7 +84,7 @@ body {
 .readiness-steps p,
 .readiness-footnote {
   font-size: 0.875rem;
-  color: #596d82;
+  color: var(--text-subtle);
   line-height: 1.7;
 }
 .readiness-steps p {
@@ -91,13 +102,13 @@ body {
 }
 .display-setting select {
   padding: 12px;
-  border: 1px solid #cbd8e7;
+  border: 1px solid var(--line-strong);
   border-radius: 5px;
-  color: #27394c;
-  background: #fff;
+  color: var(--text);
+  background: var(--surface);
 }
 .setup-command {
-  background: #edf2f7;
+  background: var(--surface-muted);
   padding: 18px;
   font-size: 0.875rem;
   white-space: pre-wrap;
@@ -127,7 +138,7 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 3px solid #95b7e4;
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 a {
@@ -152,7 +163,7 @@ button svg {
 .sidebar {
   width: 280px;
   background: var(--nav);
-  color: #a9b7c6;
+  color: var(--nav-text);
   padding: 31px 18px 0;
   position: fixed;
   inset: 0 auto 0 0;
@@ -372,7 +383,7 @@ main {
 }
 .topbar {
   height: 70px;
-  background: #fff;
+  background: var(--surface);
   border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
@@ -394,7 +405,7 @@ main {
 }
 .market-clock {
   font-variant-numeric: tabular-nums;
-  color: #596d82;
+  color: var(--text-subtle);
 }
 .market-clock small {
   font-size: 0.75rem;
@@ -457,7 +468,7 @@ h1 {
   font-size: 2rem;
   font-weight: 550;
   letter-spacing: -0.85px;
-  color: #283c50;
+  color: var(--text);
 }
 .page-heading p {
   font-size: 0.875rem;
@@ -478,16 +489,16 @@ h1 {
   min-height: 34px;
 }
 .button.primary {
-  background: #45669c;
+  background: var(--blue);
   color: #fff;
   border: 1px solid #3d5f95;
   box-shadow: 0 2px 2px #1c30580a;
 }
 .button.primary:hover {
-  background: #37598f;
+  background: var(--blue-hover);
 }
 .button.secondary {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid #dce3eb;
   color: #657990;
 }
@@ -534,7 +545,7 @@ h1 {
 .market-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  background: white;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 7px;
   margin-bottom: 23px;
@@ -567,7 +578,7 @@ h1 {
   line-height: 1.5;
 }
 .panel {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
   overflow: hidden;
@@ -675,6 +686,25 @@ h2 {
     linear-gradient(90deg, #eff3f760 1px, transparent 1px);
   background-size: 65px 50px;
   background-position: center;
+}
+.chart-loading > div:first-child {
+  color: var(--blue);
+  animation: chart-pulse 1.1s ease-in-out infinite alternate;
+}
+@keyframes chart-pulse {
+  from {
+    opacity: 0.45;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chart-loading > div:first-child {
+    animation: none;
+  }
 }
 .chart-illustration {
   width: 70px;

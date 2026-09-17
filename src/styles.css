@@ -561,6 +561,89 @@ body {
   line-height: 1.6;
   margin: 12px 0 0;
 }
+.paper-control-room {
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+.paper-control-room-heading {
+  align-items: start;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+.paper-control-room h3 {
+  color: var(--analyst-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.48rem;
+  line-height: 1.2;
+  margin: 7px 0 0;
+  max-width: 670px;
+}
+.paper-control-status {
+  background: #f7e9e6;
+  border: 1px solid #deb6ae;
+  color: #823b31;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 7px 9px;
+  white-space: nowrap;
+}
+.paper-control-room-intro {
+  color: var(--text-subtle);
+  margin: 15px 0 18px;
+  max-width: 780px;
+}
+.paper-control-strip {
+  border-block: 1px solid #d7dfe3;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.paper-control-strip div {
+  border-left: 1px solid #d7dfe3;
+  padding: 14px 16px;
+}
+.paper-control-strip div:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+.paper-control-strip span,
+.paper-control-strip strong,
+.paper-control-strip small {
+  display: block;
+}
+.paper-control-strip span {
+  color: #6d7780;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.paper-control-strip strong {
+  color: var(--analyst-ink);
+  font-size: 0.98rem;
+  margin: 8px 0 5px;
+}
+.paper-control-strip small {
+  color: var(--text-subtle);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+.paper-disclosure {
+  border-bottom: 1px solid var(--line);
+  margin-top: 16px;
+  padding-bottom: 16px;
+}
+.paper-disclosure summary {
+  color: var(--analyst-ink);
+  cursor: pointer;
+  font-weight: 700;
+}
+.paper-disclosure p {
+  color: var(--text-subtle);
+  line-height: 1.6;
+  margin: 12px 0 0;
+}
 @media (max-width: 760px) {
   .analyst-hero { flex-direction: column; gap: 18px; }
   .analyst-capability-grid { grid-template-columns: 1fr; }
@@ -573,6 +656,9 @@ body {
   .research-workspace-heading { flex-direction: column; gap: 12px; }
   .research-ledger { grid-template-columns: 1fr; }
   .research-ledger article { border-left: 0; }
+  .paper-control-room-heading { flex-direction: column; gap: 12px; }
+  .paper-control-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .paper-control-strip div:nth-child(3) { border-left: 0; padding-left: 0; }
 }
 button,
 input,

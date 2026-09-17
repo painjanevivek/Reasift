@@ -228,6 +228,55 @@ export default function AnalystIntelligence() {
         </details>
       </section>
 
+      <section className="paper-control-room" aria-labelledby="paper-control-room-title">
+        <div className="paper-control-room-heading">
+          <div>
+            <span className="analyst-kicker">PHASE 6 · CONTROLLED PAPER RESEARCH</span>
+            <h3 id="paper-control-room-title">No-trade is a valid result. Funded execution is not available here.</h3>
+          </div>
+          <span className="paper-control-status">PAPER LAUNCH CONTROL: OFF</span>
+        </div>
+        <p className="paper-control-room-intro">
+          A future operator view will show a paper-only action beside its risk decision, simulated accounting, and audit
+          record. It never connects to a broker, exchange, funded account, or live order route.
+        </p>
+        <div className="paper-control-strip" aria-label="Paper research safety status">
+          <div>
+            <span>Action</span>
+            <strong>No trade</strong>
+            <small>Valid when evidence is insufficient</small>
+          </div>
+          <div>
+            <span>Risk gate</span>
+            <strong>Not evaluated</strong>
+            <small>Runs before every paper action</small>
+          </div>
+          <div>
+            <span>Promotion</span>
+            <strong>Insufficient evidence</strong>
+            <small>Independent evaluation required</small>
+          </div>
+          <div>
+            <span>Execution</span>
+            <strong>Blocked</strong>
+            <small>No broker or funded account configured</small>
+          </div>
+        </div>
+        <details className="paper-disclosure">
+          <summary>Why paper research remains controlled</summary>
+          <div>
+            <p>
+              A simulated fill or a passing risk check does not prove market performance or approve a trade. Candidate
+              policies must remain frozen and independently evaluated on forward paper evidence before any promotion.
+            </p>
+            <p>
+              Operator kill controls, reconciliation, incident response, data rights, and jurisdiction-specific
+              compliance review are mandatory before a real paper account could be considered.
+            </p>
+          </div>
+        </details>
+      </section>
+
       <details className="analyst-disclosure" open>
         <summary>What will be shown when access is enabled</summary>
         <div>

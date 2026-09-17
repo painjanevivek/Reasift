@@ -134,6 +134,53 @@ export default function AnalystIntelligence() {
         </dl>
       </section>
 
+      <section className="portfolio-intelligence" aria-labelledby="portfolio-intelligence-title">
+        <div className="portfolio-intelligence-heading">
+          <div>
+            <span className="analyst-kicker">PHASE 4 · PRIVATE PORTFOLIO CONTEXT</span>
+            <h3 id="portfolio-intelligence-title">Your context should clarify evidence, never turn it into an order.</h3>
+          </div>
+          <span className="portfolio-status">CONSENT GATE CLOSED</span>
+        </div>
+        <p className="portfolio-intelligence-intro">
+          When enabled, Reasift will compare your selected horizon with holdings, concentration, and evidence changes.
+          It will keep hypothetical scenarios separate from your actual portfolio and will not place or suggest trades.
+        </p>
+        <div className="portfolio-preview-grid">
+          <article>
+            <span>CONSENT</span>
+            <h4>Portfolio context</h4>
+            <p>Manual holdings or approved integrations, scoped to your account and current consent.</p>
+            <strong>Awaiting authorized connection</strong>
+          </article>
+          <article>
+            <span>CONTEXT</span>
+            <h4>Horizon & exposure</h4>
+            <p>Sector, geography, currency, and holding-period fit shown with freshness and source context.</p>
+            <strong>No portfolio data loaded</strong>
+          </article>
+          <article>
+            <span>WHAT-IF</span>
+            <h4>Private scenarios</h4>
+            <p>Test a hypothetical change without changing holdings, balances, integrations, or orders.</p>
+            <strong>Scenario engine unavailable</strong>
+          </article>
+        </div>
+        <details className="portfolio-disclosure">
+          <summary>Personalization, privacy, and suitability boundary</summary>
+          <div>
+            <p>
+              Portfolio features need explicit, purpose-specific consent. Data export and deletion workflows are
+              controlled separately. Access is limited to the authenticated account and sensitive views are not cached.
+            </p>
+            <p>
+              Until jurisdiction, privacy, data-rights, and suitability reviews are complete, this workspace remains
+              informational only. It does not assess whether an investment is suitable or provide personalized advice.
+            </p>
+          </div>
+        </details>
+      </section>
+
       <details className="analyst-disclosure" open>
         <summary>What will be shown when access is enabled</summary>
         <div>

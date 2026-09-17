@@ -390,6 +390,90 @@ body {
   font-weight: 700;
   margin: 3px 0 0;
 }
+.portfolio-intelligence {
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+.portfolio-intelligence-heading {
+  align-items: start;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+.portfolio-intelligence h3 {
+  color: var(--analyst-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.48rem;
+  line-height: 1.2;
+  margin: 7px 0 0;
+  max-width: 650px;
+}
+.portfolio-status {
+  background: #fdf4df;
+  border: 1px solid #e6c57b;
+  color: #815b14;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 7px 9px;
+  white-space: nowrap;
+}
+.portfolio-intelligence-intro {
+  color: var(--text-subtle);
+  margin: 15px 0 18px;
+  max-width: 760px;
+}
+.portfolio-preview-grid {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  background: #cbd9df;
+  border: 1px solid #cbd9df;
+}
+.portfolio-preview-grid article {
+  background: #f9fbfc;
+  min-height: 185px;
+  padding: 20px;
+}
+.portfolio-preview-grid span {
+  color: var(--analyst-blue);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.portfolio-preview-grid h4 {
+  color: var(--analyst-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+  margin: 12px 0 8px;
+}
+.portfolio-preview-grid p {
+  color: var(--text-subtle);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin: 0;
+}
+.portfolio-preview-grid strong {
+  color: #6b7782;
+  display: block;
+  font-size: 0.73rem;
+  margin-top: 16px;
+}
+.portfolio-disclosure {
+  border-bottom: 1px solid var(--line);
+  margin-top: 16px;
+  padding-bottom: 16px;
+}
+.portfolio-disclosure summary {
+  color: var(--analyst-ink);
+  cursor: pointer;
+  font-weight: 700;
+}
+.portfolio-disclosure p {
+  color: var(--text-subtle);
+  line-height: 1.6;
+  margin: 12px 0 0;
+}
 @media (max-width: 760px) {
   .analyst-hero { flex-direction: column; gap: 18px; }
   .analyst-capability-grid { grid-template-columns: 1fr; }
@@ -397,6 +481,8 @@ body {
   .outlook-empty-state { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .outlook-empty-state div:nth-child(3) { border-left: 0; padding-left: 0; }
   .reliability-method { grid-template-columns: 1fr; }
+  .portfolio-intelligence-heading { flex-direction: column; gap: 12px; }
+  .portfolio-preview-grid { grid-template-columns: 1fr; }
 }
 button,
 input,

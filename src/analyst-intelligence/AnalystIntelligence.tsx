@@ -109,6 +109,31 @@ export default function AnalystIntelligence() {
         </p>
       </section>
 
+      <section className="reliability-method" aria-labelledby="reliability-method-title">
+        <div>
+          <span className="analyst-kicker">PHASE 3 · INDEPENDENT EVALUATION</span>
+          <h3 id="reliability-method-title">Reliability needs history, context, and uncertainty.</h3>
+          <p>
+            Analyst calls will be evaluated separately by horizon, sector, and market regime. Small samples are
+            shrunk toward the broader baseline; overlapping intervals are not presented as a ranking.
+          </p>
+        </div>
+        <dl>
+          <div>
+            <dt>Sample requirement</dt>
+            <dd>Awaiting sealed outcomes</dd>
+          </div>
+          <div>
+            <dt>Weighted consensus</dt>
+            <dd>Compared to simple consensus</dd>
+          </div>
+          <div>
+            <dt>Leaderboard status</dt>
+            <dd>Disabled until review</dd>
+          </div>
+        </dl>
+      </section>
+
       <details className="analyst-disclosure" open>
         <summary>What will be shown when access is enabled</summary>
         <div>

@@ -181,6 +181,53 @@ export default function AnalystIntelligence() {
         </details>
       </section>
 
+      <section className="research-workspace" aria-labelledby="research-workspace-title">
+        <div className="research-workspace-heading">
+          <div>
+            <span className="analyst-kicker">PHASE 5 · BOUNDED RESEARCH</span>
+            <h3 id="research-workspace-title">A research brief is only as useful as the evidence that can challenge it.</h3>
+          </div>
+          <span className="research-status">OPERATOR REVIEW REQUIRED</span>
+        </div>
+        <p className="research-workspace-intro">
+          The research workspace will keep source evidence, conflicting observations, and open questions in separate
+          lanes. It can propose a question for review; it cannot retrieve data, run code, modify a model, or act on a market.
+        </p>
+        <div className="research-ledger" aria-label="Research evidence workflow status">
+          <article>
+            <span className="research-ledger-label">Evidence input</span>
+            <h4>Approved sources only</h4>
+            <p>Every item must carry a source, availability time, and immutable evidence reference.</p>
+            <strong>Source connection not approved</strong>
+          </article>
+          <article>
+            <span className="research-ledger-label">Counter-evidence</span>
+            <h4>Contradictions stay visible</h4>
+            <p>Conflicting observations are held beside the working question rather than averaged away.</p>
+            <strong>No research report available</strong>
+          </article>
+          <article>
+            <span className="research-ledger-label">Unresolved</span>
+            <h4>Abstain when evidence is thin</h4>
+            <p>Missing, stale, duplicate, or hostile content produces an explicit evidence gap—not a conclusion.</p>
+            <strong>Agent remains paused</strong>
+          </article>
+        </div>
+        <details className="research-disclosure">
+          <summary>Research authority is deliberately limited</summary>
+          <div>
+            <p>
+              The agent treats retrieved text as data, never as instructions. It quarantines unapproved or suspicious
+              content and requires an operator review before experiments, tool use, or any new external capability.
+            </p>
+            <p>
+              Research output is not an analyst rating, model promotion, portfolio recommendation, or trading signal.
+              Any later handoff requires independent evaluation and explicit governance approval.
+            </p>
+          </div>
+        </details>
+      </section>
+
       <details className="analyst-disclosure" open>
         <summary>What will be shown when access is enabled</summary>
         <div>

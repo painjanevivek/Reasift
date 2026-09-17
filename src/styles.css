@@ -474,6 +474,93 @@ body {
   line-height: 1.6;
   margin: 12px 0 0;
 }
+.research-workspace {
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+.research-workspace-heading {
+  align-items: start;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+.research-workspace h3 {
+  color: var(--analyst-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.48rem;
+  line-height: 1.2;
+  margin: 7px 0 0;
+  max-width: 680px;
+}
+.research-status {
+  background: #edf2f5;
+  border: 1px solid #bac9d3;
+  color: #38566c;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 7px 9px;
+  white-space: nowrap;
+}
+.research-workspace-intro {
+  color: var(--text-subtle);
+  margin: 15px 0 18px;
+  max-width: 780px;
+}
+.research-ledger {
+  border-left: 4px solid #44758a;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.research-ledger article {
+  border: 1px solid #d2dde2;
+  border-left: 0;
+  min-height: 192px;
+  padding: 19px 20px;
+}
+.research-ledger article:nth-child(2) {
+  background: #f5f8fa;
+}
+.research-ledger-label {
+  color: #497186;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.research-ledger h4 {
+  color: var(--analyst-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+  margin: 12px 0 8px;
+}
+.research-ledger p {
+  color: var(--text-subtle);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin: 0;
+}
+.research-ledger strong {
+  color: #67747e;
+  display: block;
+  font-size: 0.73rem;
+  margin-top: 15px;
+}
+.research-disclosure {
+  border-bottom: 1px solid var(--line);
+  margin-top: 16px;
+  padding-bottom: 16px;
+}
+.research-disclosure summary {
+  color: var(--analyst-ink);
+  cursor: pointer;
+  font-weight: 700;
+}
+.research-disclosure p {
+  color: var(--text-subtle);
+  line-height: 1.6;
+  margin: 12px 0 0;
+}
 @media (max-width: 760px) {
   .analyst-hero { flex-direction: column; gap: 18px; }
   .analyst-capability-grid { grid-template-columns: 1fr; }
@@ -483,6 +570,9 @@ body {
   .reliability-method { grid-template-columns: 1fr; }
   .portfolio-intelligence-heading { flex-direction: column; gap: 12px; }
   .portfolio-preview-grid { grid-template-columns: 1fr; }
+  .research-workspace-heading { flex-direction: column; gap: 12px; }
+  .research-ledger { grid-template-columns: 1fr; }
+  .research-ledger article { border-left: 0; }
 }
 button,
 input,

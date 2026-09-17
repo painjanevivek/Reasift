@@ -1,10 +1,24 @@
+import { useState } from "react";
+
 const capabilities = [
   ["Search", "Find a covered instrument, analyst, firm, or source-attributed topic."],
   ["Consensus", "See unweighted ratings and targets with sample size and currency context."],
   ["Evidence", "Inspect the underlying analyst view, source time, freshness, and uncertainty."],
 ] as const;
 
+const horizons = [
+  ["1D", "Next trading day"],
+  ["1W", "One week"],
+  ["1M", "One month"],
+  ["3M", "One quarter"],
+  ["6M", "Six months"],
+  ["1Y", "One year"],
+  ["Multi-year", "Long-term thesis"],
+] as const;
+
 export default function AnalystIntelligence() {
+  const [horizon, setHorizon] = useState<(typeof horizons)[number][0]>("1M");
+
   return (
     <section className="analyst-intelligence" aria-labelledby="analyst-intelligence-title">
       <div className="analyst-hero">
@@ -48,6 +62,52 @@ export default function AnalystIntelligence() {
           </article>
         ))}
       </div>
+
+      <section className="horizon-outlook" aria-labelledby="horizon-outlook-title">
+        <div className="horizon-outlook-heading">
+          <div>
+            <span className="analyst-kicker">PHASE 2 · HORIZON OUTLOOK</span>
+            <h3 id="horizon-outlook-title">Choose the holding period before reading the outlook.</h3>
+          </div>
+          <p>Every horizon has its own assumptions. Longer-term analyst targets are never shown as short-term forecasts.</p>
+        </div>
+        <div className="horizon-selector" role="group" aria-label="Selected holding period">
+          {horizons.map(([label, detail]) => (
+            <button
+              key={label}
+              type="button"
+              aria-pressed={horizon === label}
+              className={horizon === label ? "selected" : ""}
+              onClick={() => setHorizon(label)}
+            >
+              <strong>{label}</strong>
+              <small>{detail}</small>
+            </button>
+          ))}
+        </div>
+        <div className="outlook-empty-state" role="status">
+          <div>
+            <span>SELECTED HORIZON</span>
+            <strong>{horizon}</strong>
+          </div>
+          <div>
+            <span>EXPECTED RANGE</span>
+            <strong>Awaiting verified data</strong>
+          </div>
+          <div>
+            <span>DOWNSIDE BAND</span>
+            <strong>Not estimated</strong>
+          </div>
+          <div>
+            <span>THESIS FIT</span>
+            <strong>Insufficient evidence</strong>
+          </div>
+        </div>
+        <p className="outlook-caveat">
+          The Phase 2 service will disclose probability ranges, volatility, drawdown, catalyst windows, freshness,
+          and uncertainty here. It will abstain rather than show a forecast when data is sparse or incompatible.
+        </p>
+      </section>
 
       <details className="analyst-disclosure" open>
         <summary>What will be shown when access is enabled</summary>

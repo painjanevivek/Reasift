@@ -260,9 +260,101 @@ body {
 .analyst-disclosure div {
   max-width: 850px;
 }
+.horizon-outlook {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.horizon-outlook-heading {
+  align-items: end;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 28px;
+  justify-content: space-between;
+  padding: 22px;
+}
+.horizon-outlook-heading h3 {
+  color: var(--analyst-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.45rem;
+  margin: 7px 0 0;
+}
+.horizon-outlook-heading p,
+.outlook-caveat {
+  color: var(--text-subtle);
+  margin: 0;
+  max-width: 470px;
+}
+.horizon-selector {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 18px 22px 8px;
+}
+.horizon-selector button {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text-subtle);
+  flex: 0 0 auto;
+  min-width: 94px;
+  padding: 9px;
+  text-align: left;
+}
+.horizon-selector button.selected {
+  background: var(--analyst-ink);
+  border-color: var(--analyst-ink);
+  color: white;
+}
+.horizon-selector strong,
+.horizon-selector small {
+  display: block;
+}
+.horizon-selector small {
+  font-size: 0.7rem;
+  margin-top: 3px;
+}
+.outlook-empty-state {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 10px 22px 0;
+}
+.outlook-empty-state div {
+  border-left: 1px solid var(--line);
+  padding: 12px 15px;
+}
+.outlook-empty-state div:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+.outlook-empty-state span,
+.outlook-empty-state strong {
+  display: block;
+}
+.outlook-empty-state span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+.outlook-empty-state strong {
+  color: var(--analyst-ink);
+  font-size: 0.92rem;
+  margin-top: 5px;
+}
+.outlook-caveat {
+  border-top: 1px solid var(--line);
+  font-size: 0.86rem;
+  margin: 18px 22px 0;
+  padding: 16px 0 21px;
+}
 @media (max-width: 760px) {
   .analyst-hero { flex-direction: column; gap: 18px; }
   .analyst-capability-grid { grid-template-columns: 1fr; }
+  .horizon-outlook-heading { align-items: start; flex-direction: column; gap: 12px; }
+  .outlook-empty-state { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .outlook-empty-state div:nth-child(3) { border-left: 0; padding-left: 0; }
 }
 button,
 input,

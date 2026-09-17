@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { ChartLoading, Empty, SignalTable, Stat } from "./components/Display";
 import HistoryForm from "./components/HistoryForm";
+import AnalystIntelligence from "./analyst-intelligence/AnalystIntelligence";
 import Readiness from "./Readiness";
 import {
   api,
@@ -45,10 +46,11 @@ import {
 
 const Chart = lazy(() => import("./Chart"));
 
-type View = "Markets" | "Signals" | "Paper account" | "Evaluation";
+type View = "Markets" | "Signals" | "Analyst research" | "Paper account" | "Evaluation";
 const views = [
   { name: "Markets", icon: ChartNoAxesCombined },
   { name: "Signals", icon: Activity },
+  { name: "Analyst research", icon: BookOpen },
   { name: "Paper account", icon: Wallet },
   { name: "Evaluation", icon: FlaskConical },
 ] as const;
@@ -390,6 +392,8 @@ export default function App() {
                   ? "A clearer view of the market."
                   : view === "Signals"
                     ? "Every signal. Every reason."
+                    : view === "Analyst research"
+                      ? "Evidence before conviction."
                     : view === "Paper account"
                       ? "Measure what actually happens."
                       : "Evidence before conviction."}
@@ -399,6 +403,8 @@ export default function App() {
                   ? "Follow price, understand the setup, and track the outcome."
                   : view === "Signals"
                     ? "A traceable record of setups, including those we choose to skip."
+                    : view === "Analyst research"
+                      ? "Trace each analyst view to its source, freshness, confidence, and disagreement."
                     : view === "Paper account"
                       ? "Simulated results, with execution costs and unresolved outcomes in view."
                       : "Replay real market data against a frozen, reproducible strategy."}
@@ -705,6 +711,7 @@ export default function App() {
               <SignalTable signals={signals} onSelect={selectSignal} />
             </section>
           )}
+          {view === "Analyst research" && <AnalystIntelligence />}
           {view === "Paper account" && (
             <>
               <div className="market-stats">

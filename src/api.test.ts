@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { number, money, time } from "./api";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { number, money, read, time } from "./api";
 describe("market display precision", () => {
   it("does not invent prices for missing data", () => {
     expect(number(undefined)).toBe("—");
@@ -14,4 +14,13 @@ describe("market display precision", () => {
     expect(time("2026-03-06T14:30:00Z")).toBe("09:30:00");
     expect(time("2026-03-09T13:30:00Z")).toBe("09:30:00");
   });
+  it("uses GET for a read-only local response", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ status: "blocked" }) });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(read("analyst-workspace")).resolves.toEqual({ status: "blocked" });
+    expect(fetchMock).toHaveBeenCalledWith("/api/v1/analyst-workspace");
+  });
 });
+
+afterEach(() => vi.unstubAllGlobals());

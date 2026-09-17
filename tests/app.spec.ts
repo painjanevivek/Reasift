@@ -146,6 +146,15 @@ test("four views and honest disconnected state", async ({ page }) => {
     page.getByRole("heading", { name: "Market-data connection" }),
   ).toBeVisible();
 });
+
+test("analyst workspace shows typed blocked readiness without enabling external capabilities", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Analyst research", exact: true }).click();
+  await expect(page.getByText("READ-ONLY · EXTERNAL CAPABILITIES DISABLED")).toBeVisible();
+  await expect(page.getByText("CONSENT: REQUIRED")).toBeVisible();
+  await expect(page.getByText("OPERATOR REVIEW: REQUIRED")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Search", exact: true })).toBeDisabled();
+});
 test("responsive layout has no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");

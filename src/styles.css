@@ -220,6 +220,15 @@ body {
   font-size: 0.9rem;
   margin-bottom: 0;
 }
+.analyst-readiness-error {
+  margin: 12px 0;
+  padding: 11px 14px;
+  border: 1px solid #e6cfae;
+  border-radius: 6px;
+  background: var(--analyst-warm);
+  color: var(--analyst-amber);
+  font-size: 0.8125rem;
+}
 .analyst-capability-grid {
   display: grid;
   gap: 14px;

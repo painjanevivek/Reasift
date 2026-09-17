@@ -1,4 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  getAnalystWorkspaceReadiness,
+  phaseFor,
+  readinessLabel,
+  type AnalystWorkspaceReadiness,
+} from "./workspace";
 
 const capabilities = [
   ["Search", "Find a covered instrument, analyst, firm, or source-attributed topic."],
@@ -18,6 +24,35 @@ const horizons = [
 
 export default function AnalystIntelligence() {
   const [horizon, setHorizon] = useState<(typeof horizons)[number][0]>("1M");
+  const [workspace, setWorkspace] = useState<AnalystWorkspaceReadiness | null>(null);
+  const [readinessError, setReadinessError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    void getAnalystWorkspaceReadiness()
+      .then((value) => {
+        if (!active) return;
+        setWorkspace(value);
+        setReadinessError("");
+      })
+      .catch((error: Error) => {
+        if (active) setReadinessError(error.message);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const phase1 = phaseFor(workspace, "phase_1");
+  const phase2 = phaseFor(workspace, "phase_2");
+  const phase3 = phaseFor(workspace, "phase_3");
+  const phase4 = phaseFor(workspace, "phase_4");
+  const phase5 = phaseFor(workspace, "phase_5");
+  const localStatus = readinessError
+    ? "LOCAL READINESS UNAVAILABLE"
+    : workspace?.external_capabilities_enabled === false
+      ? "READ-ONLY · EXTERNAL CAPABILITIES DISABLED"
+      : "LOADING LOCAL READINESS";
 
   return (
     <section className="analyst-intelligence" aria-labelledby="analyst-intelligence-title">
@@ -30,7 +65,7 @@ export default function AnalystIntelligence() {
             every view. It does not turn research into an instruction to trade.
           </p>
         </div>
-        <span className="analyst-status">AWAITING APPROVED DATA</span>
+        <span className="analyst-status" aria-live="polite">{localStatus}</span>
       </div>
 
       <form className="analyst-search" onSubmit={(event) => event.preventDefault()}>
@@ -40,7 +75,7 @@ export default function AnalystIntelligence() {
             id="analyst-search"
             type="search"
             disabled
-            placeholder="Source access is not configured"
+            placeholder={phase1?.summary ?? "Loading local readiness"}
             aria-describedby="analyst-search-help"
           />
           <button type="submit" disabled>
@@ -48,8 +83,7 @@ export default function AnalystIntelligence() {
           </button>
         </div>
         <p id="analyst-search-help">
-          Search activates only after approved data rights, an authenticated reader session, and the Phase 1
-          service deployment are verified.
+          {phase1?.blockers[0] ?? "This read-only workspace does not activate source access."}
         </p>
       </form>
 
@@ -92,15 +126,15 @@ export default function AnalystIntelligence() {
           </div>
           <div>
             <span>EXPECTED RANGE</span>
-            <strong>Awaiting verified data</strong>
+            <strong>{phase2?.summary ?? "Loading local readiness"}</strong>
           </div>
           <div>
             <span>DOWNSIDE BAND</span>
-            <strong>Not estimated</strong>
+            <strong>{readinessLabel(phase2?.gates.model_registry)}</strong>
           </div>
           <div>
             <span>THESIS FIT</span>
-            <strong>Insufficient evidence</strong>
+            <strong>{phase2?.boundaries[0] ?? "No outcome is shown without evidence"}</strong>
           </div>
         </div>
         <p className="outlook-caveat">
@@ -121,15 +155,15 @@ export default function AnalystIntelligence() {
         <dl>
           <div>
             <dt>Sample requirement</dt>
-            <dd>Awaiting sealed outcomes</dd>
+            <dd>{readinessLabel(phase3?.gates.sealed_outcomes)}</dd>
           </div>
           <div>
             <dt>Weighted consensus</dt>
-            <dd>Compared to simple consensus</dd>
+            <dd>{readinessLabel(phase3?.gates.independent_evaluator)}</dd>
           </div>
           <div>
             <dt>Leaderboard status</dt>
-            <dd>Disabled until review</dd>
+            <dd>{readinessLabel(phase3?.gates.leaderboard)}</dd>
           </div>
         </dl>
       </section>
@@ -140,7 +174,7 @@ export default function AnalystIntelligence() {
             <span className="analyst-kicker">PHASE 4 · PRIVATE PORTFOLIO CONTEXT</span>
             <h3 id="portfolio-intelligence-title">Your context should clarify evidence, never turn it into an order.</h3>
           </div>
-          <span className="portfolio-status">CONSENT GATE CLOSED</span>
+          <span className="portfolio-status">CONSENT: {readinessLabel(phase4?.gates.consent)}</span>
         </div>
         <p className="portfolio-intelligence-intro">
           When enabled, Reasift will compare your selected horizon with holdings, concentration, and evidence changes.
@@ -151,19 +185,19 @@ export default function AnalystIntelligence() {
             <span>CONSENT</span>
             <h4>Portfolio context</h4>
             <p>Manual holdings or approved integrations, scoped to your account and current consent.</p>
-            <strong>Awaiting authorized connection</strong>
+            <strong>{readinessLabel(phase4?.gates.authenticated_subject)}</strong>
           </article>
           <article>
             <span>CONTEXT</span>
             <h4>Horizon & exposure</h4>
             <p>Sector, geography, currency, and holding-period fit shown with freshness and source context.</p>
-            <strong>No portfolio data loaded</strong>
+            <strong>{phase4?.summary ?? "Loading local readiness"}</strong>
           </article>
           <article>
             <span>WHAT-IF</span>
             <h4>Private scenarios</h4>
             <p>Test a hypothetical change without changing holdings, balances, integrations, or orders.</p>
-            <strong>Scenario engine unavailable</strong>
+            <strong>{readinessLabel(phase4?.gates.portfolio_connection)}</strong>
           </article>
         </div>
         <details className="portfolio-disclosure">
@@ -187,7 +221,7 @@ export default function AnalystIntelligence() {
             <span className="analyst-kicker">PHASE 5 · BOUNDED RESEARCH</span>
             <h3 id="research-workspace-title">A research brief is only as useful as the evidence that can challenge it.</h3>
           </div>
-          <span className="research-status">OPERATOR REVIEW REQUIRED</span>
+          <span className="research-status">OPERATOR REVIEW: {readinessLabel(phase5?.gates.operator_review)}</span>
         </div>
         <p className="research-workspace-intro">
           The research workspace will keep source evidence, conflicting observations, and open questions in separate
@@ -198,19 +232,19 @@ export default function AnalystIntelligence() {
             <span className="research-ledger-label">Evidence input</span>
             <h4>Approved sources only</h4>
             <p>Every item must carry a source, availability time, and immutable evidence reference.</p>
-            <strong>Source connection not approved</strong>
+            <strong>{readinessLabel(phase5?.gates.approved_evidence)}</strong>
           </article>
           <article>
             <span className="research-ledger-label">Counter-evidence</span>
             <h4>Contradictions stay visible</h4>
             <p>Conflicting observations are held beside the working question rather than averaged away.</p>
-            <strong>No research report available</strong>
+            <strong>{phase5?.summary ?? "Loading local readiness"}</strong>
           </article>
           <article>
             <span className="research-ledger-label">Unresolved</span>
             <h4>Abstain when evidence is thin</h4>
             <p>Missing, stale, duplicate, or hostile content produces an explicit evidence gap—not a conclusion.</p>
-            <strong>Agent remains paused</strong>
+            <strong>{readinessLabel(phase5?.gates.external_tools)}</strong>
           </article>
         </div>
         <details className="research-disclosure">
@@ -227,6 +261,12 @@ export default function AnalystIntelligence() {
           </div>
         </details>
       </section>
+
+      {readinessError && (
+        <p className="analyst-readiness-error" role="status">
+          Local readiness could not be loaded. No Phase 1–5 capability has been enabled.
+        </p>
+      )}
 
       <section className="paper-control-room" aria-labelledby="paper-control-room-title">
         <div className="paper-control-room-heading">

@@ -8,6 +8,14 @@ export async function initializeSession() {
   if (!r.ok) throw new Error("The local Reasift API is unavailable.");
   csrf = (await r.json()).csrf_token;
 }
+export async function read<T>(path: string): Promise<T> {
+  const r = await fetch(`/api/v1/${path}`);
+  if (!r.ok) {
+    const data = await r.json().catch(() => ({ detail: "Local read request failed." }));
+    throw new Error(typeof data.detail === "string" ? data.detail : "Local read request failed.");
+  }
+  return r.json();
+}
 export async function api<T>(
   path: string,
   body?: unknown,
